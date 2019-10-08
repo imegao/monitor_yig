@@ -1,0 +1,68 @@
+targetPath: ./node_exporter/collector/
+databases:
+ - databaseId: 1
+   databaseNodes:
+   - fileName: tidb_monitor.go
+     name: tidb
+     dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8
+     fqName: tidb_status
+     variableLabels: status
+     labelValues: tidb
+caches:
+  - cacheId: 1
+    cacheNodes:
+      - fileName: redis_monitor.go
+        name: redis
+        addr: 192.168.2.128:6379
+        password: hehehehe
+        fqName: redis_status
+        variableLabels: status
+        labelValues: redis
+https:
+  - httpId: 111
+    httpNodes:
+      - fileName: iam_api_monitor.go
+        name: iam
+        reqWay: GET
+        url: http://www.baidu.com
+        reqHead: Accept:text/html,application/xhtml+xml,application/xml;Accept-Encoding:gzip, deflate;
+        fqName: iam_status
+        variableLabels: status
+        labelValues: iam
+  - httpId: 2
+    httpNodes:
+      - fileName: postPay_api_monitor.go
+        name: postPay
+        reqWay: GET
+        url: http://www.baidu.com
+        reqHead: Accept-Language:zh-cn,zh;
+        fqName: postPay_status
+        variableLabels: status
+        labelValues: postPay
+processes:
+  - processId: 1
+    processNodes:
+      - fileName: process_monitor.go
+        name: dnsmasq
+        fqName: dnsmasq_status
+        variableLabels: status
+        labelValues: dnsmasq
+tcps:
+  - tcpId: 1
+    tcpNodes:
+      - fileName: redistcp_monitor.go
+        name: redistcp
+        addr: 192.168.2.128:6379
+        fqName: redistcp_status
+        variableLabels: status
+        labelValues: tcp
+  - tcpId: 2
+    tcpNodes:
+      - fileName: tcp1_monitor.go
+        name: tcp1
+        addr: 192.168.2.128:9999
+        fqName: tcp1_status
+        variableLabels: status
+        labelValues: tcp
+
+
