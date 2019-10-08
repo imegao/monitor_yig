@@ -1,4 +1,4 @@
-#对象存储系统自定义监控
+# 对象存储系统自定义监控
 监控内容主要分为5个部分：
 
 * 机器硬件监控
@@ -16,7 +16,7 @@
 
 3、下载monitor_yig进入config目录，配置config.yaml，执行make。
 
-##配置文件说明
+## 配置文件说明
 配置文件配置内容为：通过模板需要生成监控项，以及监控项相关参数。
 
 配置文件出错会导致编译不成功或生成监控文件出错，每次启动程序会根据配置文件自动重新生成相关监控文件如无法自动删除生成监控文件可以在node-expoeter/collector中手动删除。
@@ -38,9 +38,9 @@
 * `reqHead:`请求头及参数，请求头和请求参数使用‘:’分割，两条请求头参间使用‘|’分割（只在https中配置）。
 * `password:`登录redis的密码(只在caches中配置)。
 配置文件例子在文档最后
-##grafana模板
+## grafana模板
 grafana监控面板模板文件为monitor_yig.json,浏览器打开grafana监页面导入。
-##config.yaml
+## config.yaml
 ```YAML
 targetPath: ./node_exporter/collector/
 databases:
