@@ -7,21 +7,21 @@
 * HTTP监控
 * TCP监控
 
-监控服务主要基于prometheus、node_exporter、alertmanager、grafana这四种监控工具实现。
+监控服务主要基于prometheus、node-exporter、alertmanager、grafana这四种监控工具实现。
 
 ##安装及使用
 1、安装golang环境
 
 2、安装prometheus、alertmanager、grafana四种工具并启动。
 
-3、下载monitor_yig进入config目录，配置config.yaml，执行make。
+3、下载monitor-yig进入config目录，配置config.yaml，执行make build。
 
 ## 配置文件说明
 配置文件配置内容为：通过模板需要生成监控项，以及监控项相关参数。
 
 配置文件出错会导致编译不成功或生成监控文件出错，每次启动程序会根据配置文件自动重新生成相关监控文件如无法自动删除生成监控文件可以在node-expoeter/collector中手动删除。
 
-运行参数 ./demo --p ~.yaml 默认参数为config/config.yaml
+运行参数 ./monitor-yig --p ~.yaml 默认参数为config/config.yaml
 
 * `targetPath:`通过监控模板生成监控文件的存放路径，一般存放在node-exporter的collector目录下，默认该项目目录下node-exporter。
 * `databases、caches、https、processes、tcps:`通过5个参数来配置需要监控的内容。
@@ -40,6 +40,15 @@
 配置文件例子在文档最后
 ## grafana模板
 grafana监控面板模板文件为monitor_yig.json,浏览器打开grafana监页面导入。
+## Docker运行
+1、docker build -t monitor/centos7:v1 . 生成docker镜像(也可以使用make image)
+
+2、docker run --name monitor\_yig -d -v /root/monitor\_yig/config:/root/monitor\_yig/config  -p 9100:9100 -p 9999:9999 monitor/centos7:v1 /bin/bash -c 'make build'(也可以使用make run)
+
+3、docker rm -f  monitor_yig 删除运行docker容器(也可以使用 make clean)
+
+在docker环境中第一次编译运行需要加载golang包，如果在下载golang包过程中因网速问题卡住，需要docker restart 
+
 ## config.yaml
 ```YAML
 targetPath: ./node_exporter/collector/
