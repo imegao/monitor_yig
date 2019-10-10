@@ -5,7 +5,7 @@ env:
 	docker build -t monitor/centos7:v1 .
 build:
 	go build
-	./demo
+	./monitor_yig
 	cd $(NODEURL) && go build
 	cd $(NODEURL) &&  ./node_exporter
 run:
