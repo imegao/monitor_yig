@@ -11,5 +11,7 @@ build:
 run:
 	docker run --name monitor_yig -v /root/monitor_yig/config:/root/monitor_yig/config  -p 9100:9100 -p 9999:9999 monitor/centos7:v1 /bin/bash -c 'make'
 
-stop:
+clean:
 	docker rm -f  monitor_yig
+log:
+	journalctl -f -u docker.service
