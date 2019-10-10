@@ -1,8 +1,15 @@
 .PHONY: build
 NODEURL = $(PWD)/node_exporter
 
+env:
+	docker build -t monitor/centos7:v1 .
 build:
 	go build
 	./demo
 	cd $(NODEURL) && go build
-	cd $(NODEURL) && sudo ./node_exporter
+	cd $(NODEURL) &&  ./node_exporter
+run:
+	docker run --name monitor_yig -v /root/monitor_yig/config:/root/monitor_yig/config  -p 9100:9100 -p 9999:9999 monitor/centos7:v1 /bin/bash -c 'make'
+
+stop:
+	docker rm -f  monitor_yig
