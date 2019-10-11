@@ -18,27 +18,6 @@ caches:
         fqName: redis_status
         variableLabels: status
         labelValues: redis
-https:
-  - httpId: 111
-    httpNodes:
-      - fileName: iam_api_monitor.go
-        name: iam
-        reqWay: GET
-        url: http://www.baidu.com
-        reqHead: Accept:text/html,application/xhtml+xml,application/xml;Accept-Encoding:gzip, deflate;
-        fqName: iam_status
-        variableLabels: status
-        labelValues: iam
-  - httpId: 2
-    httpNodes:
-      - fileName: postPay_api_monitor.go
-        name: postPay
-        reqWay: GET
-        url: http://www.baidu.com
-        reqHead: Accept-Language:zh-cn,zh;
-        fqName: postPay_status
-        variableLabels: status
-        labelValues: postPay
 processes:
   - processId: 1
     processNodes:

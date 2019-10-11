@@ -1,4 +1,4 @@
-module monitor_yig
+module Generate_MonitorFiles
 
 replace (
 	cloud.google.com/go => github.com/googleapis/google-cloud-go v0.37.4

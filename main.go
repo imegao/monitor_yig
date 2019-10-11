@@ -1,6 +1,6 @@
 package main
 import (
-	"monitor_yig/config"
+	"Generate_MonitorFiles/config"
 	"flag"
 	"fmt"
 	"os"
