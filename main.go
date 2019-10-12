@@ -79,7 +79,7 @@ func main() {
 		test:=Tcp{j.TcpNodes[0].FileName,j.TcpNodes[0].Name,j.TcpNodes[0].Addr,j.TcpNodes[0].FqName,j.TcpNodes[0].VariableLabels,j.TcpNodes[0].LabelValues}
 		generateTcp(&test)
 	}
-	for _,j:=range config.CONFIG.Https{
+	for _,j:=range config.CONFIG.Httpservers{
 		fmt.Println("HttpId: ",j.HttpId)
 		test:=Http{j.HttpNodes[0].FileName,j.HttpNodes[0].Name,j.HttpNodes[0].ReqWay,j.HttpNodes[0].Url,j.HttpNodes[0].ReqHead,j.HttpNodes[0].FqName,j.HttpNodes[0].VariableLabels,j.HttpNodes[0].LabelValues}
 		generateHttp(&test)
@@ -100,15 +100,12 @@ func generateFile(filename string)(){
 		if err != nil {
 			//如果删除失败则输出 file remove Error!
 			fmt.Printf("%s remove Error!\n",filename)
-			//输出错误详细信息
+                        //输出错误详细信息
 			fmt.Printf("%s", err)
 		} else {
 			//如果删除成功则输出 file remove OK!
 			fmt.Printf("%s remove OK!\n",filename)
-		}
-	} else{
-		fmt.Println(err)
-		return
+                       }
 	}
 }
 func generateHttp(c *Http){
@@ -126,8 +123,9 @@ func generateHttp(c *Http){
 		fmt.Println("HTTP open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
-	}
-
+	} else {
+               fmt.Printf("generate %s success\n",c.FileName)
+               }
 	httpTemplate.Execute(f,c)
 }
 func generateCache(c *Cache){
@@ -145,8 +143,9 @@ func generateCache(c *Cache){
 		fmt.Println("cache_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
-	}
-
+	} else {
+               fmt.Printf("generate %s success\n",c.FileName)
+               }
 	cacheTemplate.Execute(f,c)
 }
 func generateDb(c *Database){
@@ -164,8 +163,9 @@ func generateDb(c *Database){
 		fmt.Println("db_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
-	}
-
+	} else {
+               fmt.Printf("generate %s success\n",c.FileName)
+               }
 	dbTemplate.Execute(f,c)
 
 }
@@ -184,8 +184,9 @@ func generateProcess(c *Process){
 		fmt.Println("process_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
-	}
-
+	} else {
+               fmt.Printf("generate %s success\n",c.FileName)
+               }
 	processTemplate.Execute(f,c)
 
 }
@@ -204,8 +205,9 @@ func generateTcp(c *Tcp){
 		fmt.Println("tcp_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
-	}
-
+	} else {
+               fmt.Printf("generate %s success\n",c.FileName)
+               }
 	tcpTemplate.Execute(f,c)
 
 }

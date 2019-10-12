@@ -1,7 +1,6 @@
 package collector
 import (
 	"github.com/prometheus/client_golang/prometheus"
-	"fmt"
 	"net/http"
         "time"
         "net"
@@ -22,7 +21,7 @@ func (c *{{.Name}}Metrics) Http_function() (http_status int) {
 		Timeout:15*time.Second,
 		Transport:transport,
 	}
-	a:=strings.Split("{{.ReqHead}}",";")
+	a:=strings.Split("{{.ReqHead}}","|")
         request, err := http.NewRequest("{{.ReqWay}}","{{.Url}}" , nil)
 	for _,j:=range a{
             if j!=""{
@@ -33,12 +32,12 @@ func (c *{{.Name}}Metrics) Http_function() (http_status int) {
 
 
 	resp,err:=client.Do(request)
-	defer resp.Body.Close()
 	if err!=nil{
-		fmt.Println(err.Error())
-	}
-
-	return resp.StatusCode
+                return 
+        }else{
+             resp.Body.Close()
+             return resp.StatusCode
+        }
 }
 
 func init() {

@@ -18,6 +18,27 @@ caches:
         fqName: redis_status
         variableLabels: status
         labelValues: redis
+httpservers:
+  - httpId: 1
+    httpNodes:
+      - fileName: iam_api_monitor.go
+        name: iam
+        reqWay: GET
+        url: http://192.168.2.128:8888/hello?user=admin&pass=888
+        reqHead: Accept-Language:zh-cn,en|
+        fqName: iam_status
+        variableLabels: status
+        labelValues: iam
+  - httpId: 2
+    httpNodes:
+      - fileName: postPay_api_monitor.go
+        name: postPay
+        reqWay: HEAD
+        url: http://192.168.2.128:7777/hello?user=admin&pass=777
+        reqHead: Accept-Language:zh-cn,zh|Accept-Encoding:gzip,deflate|Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98
+        fqName: postPay_status
+        variableLabels: status
+        labelValues: postPay
 processes:
   - processId: 1
     processNodes:
@@ -29,19 +50,17 @@ processes:
 tcps:
   - tcpId: 1
     tcpNodes:
-      - fileName: redistcp_monitor.go
-        name: redistcp
-        addr: 192.168.2.128:6379
-        fqName: redistcp_status
-        variableLabels: status
-        labelValues: tcp
-  - tcpId: 2
-    tcpNodes:
       - fileName: tcp1_monitor.go
         name: tcp1
-        addr: 192.168.2.128:9999
+        addr: 192.168.2.128:9888
         fqName: tcp1_status
         variableLabels: status
         labelValues: tcp
-
-
+  - tcpId: 1
+    tcpNodes:
+      - fileName: tcp2_monitor.go
+        name: tcp2
+        addr: 192.168.2.128:9887
+        fqName: tcp2_status
+        variableLabels: status
+        labelValues: tcp

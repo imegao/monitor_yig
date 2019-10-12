@@ -7,7 +7,7 @@ image:
 	docker build -t monitor/centos7:v1 .
 build:  
 	cd $(CURL) && rm -rf *monitor.go
-	./Generate_MonitorFiles
+	go build && ./Generate_MonitorFiles
 	cd $(NODEURL) && go build
 run:
 	cd $(NODEURL) && ./node_exporter

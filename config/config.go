@@ -10,7 +10,7 @@ type CategoryConf struct{
 	TargetPath string        `yaml:"targetPath"`
 	Databases [] Database
 	Caches [] Cache
-	Https [] Http
+	Httpservers [] Http
 	Processes [] Process
 	Tcps[] Tcp
 }
