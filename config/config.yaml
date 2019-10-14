@@ -25,7 +25,7 @@ httpservers:
         name: iam
         reqWay: GET
         url: http://192.168.2.128:8888/hello?user=admin&pass=888
-        reqHead: Accept-Language:zh-cn,en|
+        reqHead: Accept-Language:zh-cn,en|dsafaf:fsvfds|
         fqName: iam_status
         variableLabels: status
         labelValues: iam
@@ -35,7 +35,7 @@ httpservers:
         name: postPay
         reqWay: HEAD
         url: http://192.168.2.128:7777/hello?user=admin&pass=777
-        reqHead: Accept-Language:zh-cn,zh|Accept-Encoding:gzip,deflate|Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98
+        reqHead: Accept-Language:zh-cn,zh|Accept-Encoding:gzip,deflate|fhdsvhodv:fdsvfsv|Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98
         fqName: postPay_status
         variableLabels: status
         labelValues: postPay

@@ -15,7 +15,7 @@ func (c *{{.Name}}Metrics) process_function() (flag bool) {
     cmd:=exec.Command("systemctl","status","{{.Name}}")
     out,err:=cmd.Output()
     if err !=nil{
-        fmt.Println(err)
+        fmt.Println("systemctl {{.Name}} err ",err)
     }
     flag=strings.Contains(string(out), "(running)")
     return flag
