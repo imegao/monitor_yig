@@ -1,5 +1,5 @@
 .PHONY: build
-NODEURL = $(PWD)/node_exporter
+NODEURL = $(PWD)/monitor_yig_exporter
 CURL = $(NODEURL)/collector
 export GO111MODULE=on
 export GOPROXY=https://goproxy.cn
@@ -10,7 +10,7 @@ build:
 	go build && ./Generate_MonitorFiles
 	cd $(NODEURL) && go build
 run:
-	cd $(NODEURL) && nohup ./node_exporter &
+	cd $(NODEURL) && ./node_exporter
 docker:
 	docker run --name monitor_yig  --privileged=true -d -v /root/monitor_yig/node_exporter:/root/monitor_yig/ -p 9100:9100 -p 9999:9999 monitor/centos7:v1 /bin/bash -c './node_exporter'
 

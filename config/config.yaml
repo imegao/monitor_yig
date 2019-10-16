@@ -1,4 +1,4 @@
-targetPath: ./node_exporter/collector/
+targetPath: ./monitor_yig_exporter/collector/
 databases:
  - databaseId: 1
    databaseNodes:
