@@ -15,30 +15,30 @@ type CategoryConf struct{
 	Tcps[] Tcp
 }
 type Database struct {
-	DatabaseId string   `yaml:"databaseId"`
+	DatabaseHostId string   `yaml:"databaseHostId"`
 	DatabaseNodes [] DatabaseNode   `yaml:"databaseNodes"`
 }
 type Cache struct {
-	CacheId string    `yaml:"cacheId"`
+	CacheHostId string    `yaml:"cacheHostId"`
 	CacheNodes [] CacheNode `yaml:"cacheNodes"`
 }
 
 type Http struct {
-	HttpId string      `yaml:"httpId"`
+	HttpHostId string      `yaml:"httpHostId"`
 	HttpNodes [] HttpNode   `yaml:"httpNodes"`
 }
 
 type Tcp struct {
-	TcpId string      `yaml:"tcpId"`
+	TcpHostId string      `yaml:"tcpHostId"`
 	TcpNodes [] TcpNode   `yaml:"tcpNodes"`
 }
 type Process struct {
-	ProcessId string      `yaml:"processId"`
+	ProcessHostId string      `yaml:"processHostId"`
 	ProcessNodes [] ProcessNode   `yaml:"processNodes"`
 }
 type DatabaseNode struct{
 	FileName string   `yaml:"fileName"`
-	Name string       `yaml:"name"`
+	Type string       `yaml:"type"`
 	DataSourceName string   `yaml:"dataSourceName"`
 	FqName string     `yaml:"fqName"`
 	VariableLabels string `yaml:"variableLabels"`
@@ -47,7 +47,7 @@ type DatabaseNode struct{
 
 type CacheNode struct{
 	FileName string   `yaml:"fileName"`
-        Name string       `yaml:"name"`
+        Type string       `yaml:"type"`
 	Addr string       `yaml:"addr"`
 	Password string   `yaml:"password"`
 	FqName string     `yaml:"fqName"`
@@ -57,10 +57,10 @@ type CacheNode struct{
 
 type HttpNode struct{
 	FileName string   `yaml:"fileName"`
-	Name string       `yaml:"name"`
-	ReqWay string     `yaml:"reqWay"`
+	Type string       `yaml:"type"`
+	Method string     `yaml:"method"`
         Url string        `yaml:"url"`
-        ReqHead string    `yaml:"reqHead"`
+        Headers []string    `yaml:"headers"`
 	FqName string     `yaml:"fqName"`
 	VariableLabels string  `yaml:"variableLabels"`
 	LabelValues string  `yaml:"labelValues"`
@@ -68,7 +68,7 @@ type HttpNode struct{
 
 type TcpNode struct{
 	FileName string   `yaml:"fileName"`
-	Name string       `yaml:"name"`
+	Type string       `yaml:"type"`
 	Addr string         `yaml:"addr"`
 	FqName string     `yaml:"fqName"`
 	VariableLabels string  `yaml:"variableLabels"`
@@ -76,7 +76,7 @@ type TcpNode struct{
 }
 type ProcessNode struct{
 	FileName string   `yaml:"fileName"`
-	Name string       `yaml:"name"`
+	Type string       `yaml:"type"`
 	FqName string     `yaml:"fqName"`
 	VariableLabels string  `yaml:"variableLabels"`
 	LabelValues string  `yaml:"labelValues"`

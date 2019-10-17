@@ -21,16 +21,15 @@ func (c *iamMetrics) Http_function() (http_status int) {
 		Timeout:15*time.Second,
 		Transport:transport,
 	}
-	a:=strings.Split("Accept-Language:zh-cn,en|dsafaf:fsvfds|","|")
         request, err := http.NewRequest("GET","http://192.168.2.128:8888/hello?user=admin&pass=888" , nil)
-	for _,j:=range a{
-            if j!=""{
-	    	head:=strings.Split(j,":")
-                request.Header.Set(head[0], head[1])
-            }
-         }
-
-
+        var head[]string
+        
+        head=strings.Split("Accept-Language:zh-cn,en",":")
+        request.Header.Set(head[0], head[1])
+        
+        head=strings.Split("dsafaf:fsvfds",":")
+        request.Header.Set(head[0], head[1])
+        
 	resp,err:=client.Do(request)
 	if err!=nil{
                 return 

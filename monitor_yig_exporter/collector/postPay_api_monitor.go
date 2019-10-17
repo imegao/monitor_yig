@@ -21,16 +21,21 @@ func (c *postPayMetrics) Http_function() (http_status int) {
 		Timeout:15*time.Second,
 		Transport:transport,
 	}
-	a:=strings.Split("Accept-Language:zh-cn,zh|Accept-Encoding:gzip,deflate|fhdsvhodv:fdsvfsv|Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98","|")
         request, err := http.NewRequest("HEAD","http://192.168.2.128:7777/hello?user=admin&pass=777" , nil)
-	for _,j:=range a{
-            if j!=""{
-	    	head:=strings.Split(j,":")
-                request.Header.Set(head[0], head[1])
-            }
-         }
-
-
+        var head[]string
+        
+        head=strings.Split("Accept-Language:zh-cn,zh",":")
+        request.Header.Set(head[0], head[1])
+        
+        head=strings.Split("Accept-Encoding:gzip,deflate",":")
+        request.Header.Set(head[0], head[1])
+        
+        head=strings.Split("fhdsvhodv:fdsvfsv",":")
+        request.Header.Set(head[0], head[1])
+        
+        head=strings.Split("Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98",":")
+        request.Header.Set(head[0], head[1])
+        
 	resp,err:=client.Do(request)
 	if err!=nil{
                 return 

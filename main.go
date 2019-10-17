@@ -7,53 +7,6 @@ import (
 	"text/template"
 )
 
-type Database struct {
-	FileName string
-	Name string
-	DataSourceName  string
-	FqName string
-	VariableLabels string
-	LabelValues string
-
-}
-
-type Cache struct {
-	FileName string
-	Name string
-	Addr  string
-	Password string
-	FqName string
-	VariableLabels string
-	LabelValues string
-
-}
-type Tcp struct {
-	FileName string
-	Name string
-	Addr  string
-	FqName string
-	VariableLabels string
-	LabelValues string
-}
-type Http struct {
-	FileName string
-	Name string
-	ReqWay string
-	Url  string
-	ReqHead string
-	FqName string
-	VariableLabels string
-	LabelValues string
-}
-type Process struct {
-	FileName string
-	Name string
-	FqName string
-	VariableLabels string
-	LabelValues string
-}
-
-
 func main() {
 	var ConfigPath string
 	flag.StringVar(&ConfigPath,"p","config/config.yaml","Path of configuration file")
@@ -64,30 +17,35 @@ func main() {
 	if err!=nil{
 		fmt.Println(err)
 	}
-	for _,j:=range config.CONFIG.Databases{
-		fmt.Println("DatabaseId: ",j.DatabaseId)
-		test:=Database{j.DatabaseNodes[0].FileName,j.DatabaseNodes[0].Name,j.DatabaseNodes[0].DataSourceName,j.DatabaseNodes[0].FqName,j.DatabaseNodes[0].VariableLabels,j.DatabaseNodes[0].LabelValues}
-		generateDb(&test)
+	for _,host:=range config.CONFIG.Databases{
+		fmt.Println("DatabaseHostId: ",host.DatabaseHostId)
+		for _,node:=range host.DatabaseNodes{
+                    generateDb(&node)
+                }
 	}
-	for _,j:=range config.CONFIG.Caches{
-		fmt.Println("CacheId: ",j.CacheId)
-		test1:=Cache{j.CacheNodes[0].FileName,j.CacheNodes[0].Name,j.CacheNodes[0].Addr,j.CacheNodes[0].Password,j.CacheNodes[0].FqName,j.CacheNodes[0].VariableLabels,j.CacheNodes[0].LabelValues}
-		generateCache(&test1)
+	for _,host:=range config.CONFIG.Caches{
+		fmt.Println("CacheHostId: ",host.CacheHostId)
+		for _,node:=range host.CacheNodes{
+                    generateCache(&node)
+	        }
+        }
+	for _,host:=range config.CONFIG.Tcps{
+		fmt.Println("TcpHostId: ",host.TcpHostId)
+                for _,node:=range host.TcpNodes{
+		    generateTcp(&node)
+                }
 	}
-	for _,j:=range config.CONFIG.Tcps{
-		fmt.Println("TcpId: ",j.TcpId)
-		test:=Tcp{j.TcpNodes[0].FileName,j.TcpNodes[0].Name,j.TcpNodes[0].Addr,j.TcpNodes[0].FqName,j.TcpNodes[0].VariableLabels,j.TcpNodes[0].LabelValues}
-		generateTcp(&test)
+	for _,host:=range config.CONFIG.Httpservers{
+		fmt.Println("HttpHostId: ",host.HttpHostId)
+		for _,node:=range host.HttpNodes{
+                    generateHttp(&node)
+                }
 	}
-	for _,j:=range config.CONFIG.Httpservers{
-		fmt.Println("HttpId: ",j.HttpId)
-		test:=Http{j.HttpNodes[0].FileName,j.HttpNodes[0].Name,j.HttpNodes[0].ReqWay,j.HttpNodes[0].Url,j.HttpNodes[0].ReqHead,j.HttpNodes[0].FqName,j.HttpNodes[0].VariableLabels,j.HttpNodes[0].LabelValues}
-		generateHttp(&test)
-	}
-	for _,j:=range config.CONFIG.Processes{
-		fmt.Println("ProcessId: ",j.ProcessId)
-		test:=Process{j.ProcessNodes[0].FileName,j.ProcessNodes[0].Name,j.ProcessNodes[0].FqName,j.ProcessNodes[0].VariableLabels,j.ProcessNodes[0].LabelValues}
-		generateProcess(&test)
+	for _,host:=range config.CONFIG.Processes{
+		fmt.Println("ProcessHostId: ",host.ProcessHostId)
+                for _,node:=range host.ProcessNodes{
+		    generateProcess(&node)
+                }
 	}
 
 }
@@ -108,7 +66,7 @@ func generateFile(filename string)(){
                        }
 	}
 }
-func generateHttp(c *Http){
+func generateHttp(c *config.HttpNode){
     var err error
 	var httpTemplate *template.Template
 	httpTemplate, err = template.ParseFiles("./collector/http_template.go")
@@ -128,7 +86,7 @@ func generateHttp(c *Http){
                }
 	httpTemplate.Execute(f,c)
 }
-func generateCache(c *Cache){
+func generateCache(c *config.CacheNode){
 	var err error
 	var cacheTemplate *template.Template
 	cacheTemplate, err = template.ParseFiles("./collector/cache_template.go")
@@ -148,7 +106,7 @@ func generateCache(c *Cache){
                }
 	cacheTemplate.Execute(f,c)
 }
-func generateDb(c *Database){
+func generateDb(c *config.DatabaseNode){
 	var err error
 	var dbTemplate *template.Template
 	dbTemplate, err = template.ParseFiles("./collector/db_template.go")
@@ -169,7 +127,7 @@ func generateDb(c *Database){
 	dbTemplate.Execute(f,c)
 
 }
-func generateProcess(c *Process){
+func generateProcess(c *config.ProcessNode){
 	var err error
 	var processTemplate *template.Template
 	processTemplate, err = template.ParseFiles("./collector/process_template.go")
@@ -190,7 +148,7 @@ func generateProcess(c *Process){
 	processTemplate.Execute(f,c)
 
 }
-func generateTcp(c *Tcp){
+func generateTcp(c *config.TcpNode){
 	var err error
 	var tcpTemplate *template.Template
 	tcpTemplate, err = template.ParseFiles("./collector/tcp_template.go")

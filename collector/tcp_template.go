@@ -4,11 +4,11 @@ import(
         "time"
 	"github.com/prometheus/client_golang/prometheus"
 )
-type {{.Name}}Metrics struct {
-    {{.Name}}Desc *prometheus.Desc
+type {{.Type}}Metrics struct {
+    {{.Type}}Desc *prometheus.Desc
 }
 
-func (c *{{.Name}}Metrics) tcp_function() (flag int) {
+func (c *{{.Type}}Metrics) tcp_function() (flag int) {
 	_,err := net.DialTimeout("tcp","{{.Addr}}",time.Second*10)
 	if err!=nil {
             return 0
@@ -18,11 +18,11 @@ func (c *{{.Name}}Metrics) tcp_function() (flag int) {
 }
 
 func init() {
-	registerCollector("{{.Name}}", defaultEnabled, New{{.Name}}Metrics)
+	registerCollector("{{.Type}}", defaultEnabled, New{{.Type}}Metrics)
 }
-func New{{.Name}}Metrics()  (Collector, error) {
-	return &{{.Name}}Metrics{
-        {{.Name}}Desc: prometheus.NewDesc(
+func New{{.Type}}Metrics()  (Collector, error) {
+	return &{{.Type}}Metrics{
+        {{.Type}}Desc: prometheus.NewDesc(
         "{{.FqName}}",
         "{{.FqName}}_monitor",
         []string{"{{.VariableLabels}}"},
@@ -30,10 +30,10 @@ func New{{.Name}}Metrics()  (Collector, error) {
         ),
      }, nil
 }
-func (c *{{.Name}}Metrics) Update(ch chan<- prometheus.Metric) error{
+func (c *{{.Type}}Metrics) Update(ch chan<- prometheus.Metric) error{
 	flag:=c.tcp_function()
     ch <- prometheus.MustNewConstMetric(
-        c.{{.Name}}Desc,
+        c.{{.Type}}Desc,
         prometheus.CounterValue,
         float64(flag),
         "{{.LabelValues}}",
