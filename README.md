@@ -107,38 +107,38 @@ groups:
 
 * `targetPath:`通过监控模板生成监控文件的存放路径，一般存放在node-exporter的collector目录下，默认该项目目录下node-exporter。
 * `databases、caches、https、processes、tcps:`通过5个参数来配置需要监控的内容。
-* `~Id：`该项区分同一监控内容下不同的监控项目，不同监控项目的ID必须为唯一数字，不能重复。
+* `~HostId：`该项区分不同的监控主机，不同监控主机的ID。
 * `fileName:`通过模板生成监控文件的名称，必须唯一，不能重复，建议格式~_monitor.go。
-* `name:`为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符。
+* `Type:`为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符。
 * `fqName:`为metrics采集数据的格式名称。
 * `variableLabels:`为metrics采集数据的格式标签名称。
 * `labelValues:`为metrics采集数据的格式标签值。
 * `dataSourceName:`数据库登录信息(只在databases中配置)。
 * `addr:`IP和端口（只在caches、tcps中配置）。
-* `reqWay:`http请求方法（只在https中配置）。
+* `method:`http请求方法（只在https中配置）。
 * `url:`域名配置（只在https中配置）。
-* `reqHead:`请求头及参数，请求头和请求参数使用‘:’分割，两条请求头参间使用‘|’分割（只在https中配置，不能存在空格）。
+* `Headers:`请求头及参数，使用数组的方式，请求头和请求参数使用‘:’分割。
 * `password:`登录redis的密码(只在caches中配置)。
 
 ```YAML
 #配置生成监控文件的路径
 targetPath: ./node_exporter/collector/
 #配置监控数据库内容
-databases:
- - databaseId: 1   #该项区分同一监控内容下不同的监控项目，不同监控项目的ID必须为唯一数字，不能重复。
-   databaseNodes:
+databases:数组 不同主机
+ - databaseHostId: 192.168.2.1   #该项区分不同监控主机，不同监控主机的ID。
+   databaseNodes:  数组 同一主机下配置不同的监控节点
    - fileName: tidb_monitor.go #通过模板生成监控文件的名称，必须唯一，不能重复，建议格式~_monitor.go。
-     name: tidb #为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符
+     type: tidb #为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符
      dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8 #数据库登录信息
      fqName: tidb_status #为metrics采集数据的格式名称
      variableLabels: status #为metrics采集数据的格式标签名称
      labelValues: tidb #为metrics采集数据的格式标签值
 #配置监控redis内容
 caches:
-  - cacheId: 1
+  - cacheHostId: 192.168.2.1
     cacheNodes:
       - fileName: redis_monitor.go
-        name: redis
+        type: redis
         addr: 192.168.2.128:6379  #redis的IP
         password: hehehehe #登录密码
         fqName: redis_status
@@ -146,49 +146,47 @@ caches:
         labelValues: redis
 #配置监控HTTP请求内容
 https:
-  - httpId: 1
+  - httpHostId: 192.168.2.1
     httpNodes:
       - fileName: iam_api_monitor.go
-        name: iam
-        reqWay: GET     #请求方式
+        type: iam
+        method: GET     #请求方式
         url: http://www.baidu.com  #请求URL
-        reqHead: Accept:text/html,application/xhtml+xml,application/xml|Accept-Encoding:gzip, deflate|#请求头
+        headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
         fqName: iam_status
         variableLabels: status
         labelValues: iam
-  - httpId: 2
-    httpNodes:
       - fileName: postPay_api_monitor.go
-        name: postPay
-        reqWay: GET
+        type: postPay
+        method: GET
         url: http://www.baidu.com
-        reqHead: Accept-Language:zh-cn,zh|
+        headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
         fqName: postPay_status
         variableLabels: status
         labelValues: postPay
 #配置监控systemctl服务
 processes:
-  - processId: 1
+  - processHostId: 192.168.2.1
     processNodes:
       - fileName: process_monitor.go
-        name: dnsmasq
+        type: dnsmasq
         fqName: dnsmasq_status
         variableLabels: status
         labelValues: dnsmasq
 #配置监控TCP连接
 tcps:
-  - tcpId: 1
+  - tcpHostId: 192.168.2.1
     tcpNodes:
       - fileName: redistcp_monitor.go
-        name: redistcp
+        type: redistcp
         addr: 192.168.2.128:6379
         fqName: redistcp_status
         variableLabels: status
         labelValues: tcp
-  - tcpId: 2
+  - tcpHostId: 192.168.2.2
     tcpNodes:
       - fileName: tcp1_monitor.go
-        name: tcp1
+        type: tcp1
         addr: 192.168.2.128:9999
         fqName: tcp1_status
         variableLabels: status
