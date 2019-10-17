@@ -124,9 +124,9 @@ groups:
 #配置生成监控文件的路径
 targetPath: ./node_exporter/collector/
 #配置监控数据库内容
-databases:数组 不同主机
+databases:#数组 不同主机
  - databaseHostId: 192.168.2.1   #该项区分不同监控主机，不同监控主机的ID。
-   databaseNodes:  数组 同一主机下配置不同的监控节点
+   databaseNodes:  #数组 同一主机下配置不同的监控节点
    - fileName: tidb_monitor.go #通过模板生成监控文件的名称，必须唯一，不能重复，建议格式~_monitor.go。
      type: tidb #为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符
      dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8 #数据库登录信息
