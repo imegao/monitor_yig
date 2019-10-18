@@ -11,6 +11,8 @@ build:
 	cd $(NODEURL) && go build
 run:
 	cd $(NODEURL) && ./node_exporter
+stop:
+	ps -ef |grep node_exporter |grep -v grep|cut -c 9-16|xargs kill -9
 docker:
 	docker run --name monitor_yig  --privileged=true -d -v /root/monitor_yig/node_exporter:/root/monitor_yig/ -p 9100:9100 -p 9999:9999 monitor/centos7:v1 /bin/bash -c './node_exporter'
 
