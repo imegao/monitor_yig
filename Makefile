@@ -10,7 +10,7 @@ build:
 	go build && ./Generate_MonitorFiles
 	cd $(NODEURL) && go build
 run:
-	cd $(NODEURL) && ./node_exporter
+	cd $(NODEURL) && ./node_exporter &
 stop:
 	ps -ef |grep node_exporter |grep -v grep|cut -c 9-16|xargs kill -9
 docker:
