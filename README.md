@@ -14,8 +14,9 @@
 
 2、安装prometheus、alertmanager、grafana四种工具并启动。
 
-3、下载monitor-yig进入config目录，配置config.yaml，执行make build编译，再执行，make run 运行,make stop停止。
+3、下载monitor-yig进入config目录，配置config.yaml，执行make build编译，再执行make run 运行,make stop停止（使用make stop 注意避免将本机其他node_exporter关闭）。
 
+4、在Makefile中配置exporter的端口，默认端口是9100
 ## 配置文件说明
 配置文件包括 prometheus配置文件、alertmanager配置文件、monitor\_yig配置文件，配置yaml文件要注意格式问题，大部分出错都是和格式有关，有时候直接复制粘贴也会引起不知名格式问题。
 
