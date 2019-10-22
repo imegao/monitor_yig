@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"text/template"
+        "regexp"
 )
 
 func main() {
@@ -17,37 +18,21 @@ func main() {
 	if err!=nil{
 		fmt.Println(err)
 	}
-	for _,host:=range config.CONFIG.Databases{
-		fmt.Println("DatabaseHostId: ",host.DatabaseHostId)
-		for _,node:=range host.DatabaseNodes{
-                    generateDb(&node)
-                }
-	}
-	for _,host:=range config.CONFIG.Caches{
-		fmt.Println("CacheHostId: ",host.CacheHostId)
-		for _,node:=range host.CacheNodes{
-                    generateCache(&node)
-	        }
+	for _,node:=range config.CONFIG.Mysql{
+                generateMysql(&node)
         }
-	for _,host:=range config.CONFIG.Tcps{
-		fmt.Println("TcpHostId: ",host.TcpHostId)
-                for _,node:=range host.TcpNodes{
-		    generateTcp(&node)
-                }
-	}
-	for _,host:=range config.CONFIG.Httpservers{
-		fmt.Println("HttpHostId: ",host.HttpHostId)
-		for _,node:=range host.HttpNodes{
-                    generateHttp(&node)
-                }
-	}
-	for _,host:=range config.CONFIG.Processes{
-		fmt.Println("ProcessHostId: ",host.ProcessHostId)
-                for _,node:=range host.ProcessNodes{
-		    generateProcess(&node)
-                }
-	}
-
+        for _,node:=range config.CONFIG.Redis{
+                generateRedis(&node)
+        }
+        for _,node:=range config.CONFIG.Tcp{
+                generateTcp(&node)
+        }
+        for _,node:=range config.CONFIG.Http{
+                generateHttp(&node)
+        }
+        for _,node:=range config.CONFIG.Process{
+                generateProcess(&node)
+        }
 }
 
 func generateFile(filename string)(){
@@ -67,63 +52,81 @@ func generateFile(filename string)(){
 	}
 }
 func generateHttp(c *config.HttpNode){
-    var err error
+        var err error
 	var httpTemplate *template.Template
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        if ok!=true{
+                fmt.Println("HTTP itemId Configuration error")
+                os.Exit(1)
+        }
 	httpTemplate, err = template.ParseFiles("./collector/http_template.go")
 	if err != nil {
 		fmt.Println("HTTP parse file err:", err)
 		return
 	}
-	generateFile(config.CONFIG.TargetPath+c.FileName)
-	f,err:=os.OpenFile(config.CONFIG.TargetPath+c.FileName,os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	generateFile(config.CONFIG.TargetPath+"http_"+c.ItemId+"_monitor.go")
+	f,err:=os.OpenFile(config.CONFIG.TargetPath+"http_"+c.ItemId+"_monitor.go",os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	defer f.Close()
 	if err != nil {
 		fmt.Println("HTTP open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
 	} else {
-               fmt.Printf("generate %s success\n",c.FileName)
+               fmt.Printf("generate %s success\n","http_"+c.ItemId+"_monitor.go")
                }
+        c.Host=config.CONFIG.Host
 	httpTemplate.Execute(f,c)
 }
-func generateCache(c *config.CacheNode){
+func generateRedis(c *config.RedisNode){
 	var err error
 	var cacheTemplate *template.Template
-	cacheTemplate, err = template.ParseFiles("./collector/cache_template.go")
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        if ok!=true{
+                fmt.Println("Redis itemId Configuration error")
+                os.Exit(1)
+        }
+	cacheTemplate, err = template.ParseFiles("./collector/redis_template.go")
 	if err != nil {
 		fmt.Println("cache_template parse file err:", err)
 		return
 	}
-	generateFile(config.CONFIG.TargetPath+c.FileName)
-	f,err:=os.OpenFile(config.CONFIG.TargetPath+c.FileName,os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	generateFile(config.CONFIG.TargetPath+"redis_"+c.ItemId+"_monitor.go")
+	f,err:=os.OpenFile(config.CONFIG.TargetPath+"redis_"+c.ItemId+"_monitor.go",os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	defer f.Close()
 	if err != nil {
-		fmt.Println("cache_template file open Error!")
+		fmt.Println("redis_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
 	} else {
-               fmt.Printf("generate %s success\n",c.FileName)
+               fmt.Printf("generate %s success\n","redis_"+c.ItemId+"_monitor.go")
                }
+        c.Host=config.CONFIG.Host
 	cacheTemplate.Execute(f,c)
 }
-func generateDb(c *config.DatabaseNode){
+func generateMysql(c *config.MysqlNode){
 	var err error
 	var dbTemplate *template.Template
-	dbTemplate, err = template.ParseFiles("./collector/db_template.go")
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        if ok!=true{
+                fmt.Println("Mysql itemId Configuration error")
+                os.Exit(1)
+        }  
+	dbTemplate, err = template.ParseFiles("./collector/mysql_template.go")
 	if err != nil {
-		fmt.Println("db_template parse file err:", err)
+		fmt.Println("mysql_template parse file err:", err)
 		return
 	}
-	generateFile(config.CONFIG.TargetPath+c.FileName)
-	f,err:=os.OpenFile(config.CONFIG.TargetPath+c.FileName,os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	generateFile(config.CONFIG.TargetPath+"mysql_"+c.ItemId+"_monitor.go")
+	f,err:=os.OpenFile(config.CONFIG.TargetPath+"mysql_"+c.ItemId+"_monitor.go",os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	defer f.Close()
 	if err != nil {
-		fmt.Println("db_template file open Error!")
+		fmt.Println("mysql_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
 	} else {
-               fmt.Printf("generate %s success\n",c.FileName)
+               fmt.Printf("generate %s success\n","mysql_"+c.ItemId+"_monitor.go")
                }
+        c.Host=config.CONFIG.Host
 	dbTemplate.Execute(f,c)
 
 }
@@ -135,37 +138,43 @@ func generateProcess(c *config.ProcessNode){
 		fmt.Println("process_template parse file err:", err)
 		return
 	}
-	generateFile(config.CONFIG.TargetPath+c.FileName)
-	f,err:=os.OpenFile(config.CONFIG.TargetPath+c.FileName,os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	generateFile(config.CONFIG.TargetPath+"process_"+c.ItemId+"_monitor.go")
+	f,err:=os.OpenFile(config.CONFIG.TargetPath+"process_"+c.ItemId+"_monitor.go",os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	defer f.Close()
 	if err != nil {
 		fmt.Println("process_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
 	} else {
-               fmt.Printf("generate %s success\n",c.FileName)
+               fmt.Printf("generate %s success\n","process_"+c.ItemId+"_monitor.go")
                }
+        c.Host=config.CONFIG.Host
 	processTemplate.Execute(f,c)
-
 }
 func generateTcp(c *config.TcpNode){
 	var err error
 	var tcpTemplate *template.Template
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        if ok!=true{
+                fmt.Println("TCP itemId Configuration error")
+                os.Exit(1)
+        }  
 	tcpTemplate, err = template.ParseFiles("./collector/tcp_template.go")
 	if err != nil {
 		fmt.Println("tcp_template parse file err:", err)
 		return
 	}
-	generateFile(config.CONFIG.TargetPath+c.FileName)
-	f,err:=os.OpenFile(config.CONFIG.TargetPath+c.FileName,os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	generateFile(config.CONFIG.TargetPath+"tcp_"+c.ItemId+"_monitor.go")
+	f,err:=os.OpenFile(config.CONFIG.TargetPath+"tcp_"+c.ItemId+"_monitor.go",os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	defer f.Close()
 	if err != nil {
 		fmt.Println("tcp_template file open Error!")
 		//输出错误详细信息
 		fmt.Printf("%s", err)
 	} else {
-               fmt.Printf("generate %s success\n",c.FileName)
+               fmt.Printf("generate %s success\n","tcp_"+c.ItemId+"_monitor.go")
                }
+        c.Host=config.CONFIG.Host
 	tcpTemplate.Execute(f,c)
 
 }

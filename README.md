@@ -107,13 +107,9 @@ groups:
 运行参数 ./monitor-yig --p config.yaml 默认参数为config/config.yaml
 
 * `targetPath:`通过监控模板生成监控文件的存放路径，一般存放在node-exporter的collector目录下，默认该项目目录下node-exporter。
-* `databases、caches、https、processes、tcps:`通过5个参数来配置需要监控的内容。
-* `~HostId：`该项区分不同的监控主机，不同监控主机的ID。
-* `fileName:`通过模板生成监控文件的名称，必须唯一，不能重复，建议格式~_monitor.go。
-* `Type:`为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符。
-* `fqName:`为metrics采集数据的格式名称。
-* `variableLabels:`为metrics采集数据的格式标签名称。
-* `labelValues:`为metrics采集数据的格式标签值。
+* `host:`当前主机的IP
+* `mysql、redis、http、process、tcp:`通过5个参数来配置需要监控的类型。
+* `itemId:`为监控项的ID,必须唯一，格式为（字符串+四位数字）
 * `dataSourceName:`数据库登录信息(只在databases中配置)。
 * `addr:`IP和端口（只在caches、tcps中配置）。
 * `method:`http请求方法（只在https中配置）。
@@ -123,75 +119,31 @@ groups:
 
 ```YAML
 #配置生成监控文件的路径
-targetPath: ./node_exporter/collector/
-#配置监控数据库内容
-databases:#数组 不同主机
- - databaseHostId: 192.168.2.1   #该项区分不同监控主机，不同监控主机的ID。
-   databaseNodes:  #数组 同一主机下配置不同的监控节点
-   - fileName: tidb_monitor.go #通过模板生成监控文件的名称，必须唯一，不能重复，建议格式~_monitor.go。
-     type: tidb #为监控函数名称，必须唯一，不能重复，应为字母组合，不能为数字或特殊字符
-     dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8 #数据库登录信息
-     fqName: tidb_status #为metrics采集数据的格式名称
-     variableLabels: status #为metrics采集数据的格式标签名称
-     labelValues: tidb #为metrics采集数据的格式标签值
-#配置监控redis内容
-caches:
-  - cacheHostId: 192.168.2.1
-    cacheNodes:
-      - fileName: redis_monitor.go
-        type: redis
-        addr: 192.168.2.128:6379  #redis的IP
-        password: hehehehe #登录密码
-        fqName: redis_status
-        variableLabels: status
-        labelValues: redis
-#配置监控HTTP请求内容
-https:
-  - httpHostId: 192.168.2.1
-    httpNodes:
-      - fileName: iam_api_monitor.go
-        type: iam
-        method: GET     #请求方式
-        url: http://www.baidu.com  #请求URL
-        headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
-        fqName: iam_status
-        variableLabels: status
-        labelValues: iam
-      - fileName: postPay_api_monitor.go
-        type: postPay
-        method: GET
-        url: http://www.baidu.com
-        headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
-        fqName: postPay_status
-        variableLabels: status
-        labelValues: postPay
-#配置监控systemctl服务
-processes:
-  - processHostId: 192.168.2.1
-    processNodes:
-      - fileName: process_monitor.go
-        type: dnsmasq
-        fqName: dnsmasq_status
-        variableLabels: status
-        labelValues: dnsmasq
-#配置监控TCP连接
-tcps:
-  - tcpHostId: 192.168.2.1
-    tcpNodes:
-      - fileName: redistcp_monitor.go
-        type: redistcp
-        addr: 192.168.2.128:6379
-        fqName: redistcp_status
-        variableLabels: status
-        labelValues: tcp
-  - tcpHostId: 192.168.2.2
-    tcpNodes:
-      - fileName: tcp1_monitor.go
-        type: tcp1
-        addr: 192.168.2.128:9999
-        fqName: tcp1_status
-        variableLabels: status
-        labelValues: tcp
+targetPath: ./monitor_yig_exporter/collector/
+host: 192.168.2.128  #监控主机的IP
+mysql:
+  - itemId: tidb_4000  监控项的ID,必须唯一，格式：字符串_四位数字
+    dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8
+redis:
+  - itemId: redis_6379
+    addr: 192.168.2.128:6379
+    password: hehehehe
+http:
+  - itemId: Iam_0001
+    method: GET
+    url: http://192.168.2.128:8888/hello?user=admin&pass=888
+    headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
+  - itemId: PostPay_0001
+    method: HEAD
+    url: http://192.168.2.128:7777/hello?user=admin&pass=777
+    headers: ["Accept-Language:zh-cn,zh","Accept-Encoding:gzip,deflate","fhdsvhodv:fdsvfsv","Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98"]
+process:
+  - itemId: dnsmasq  #监控systemctl服务的名称 不同于其他ID
+tcp:
+  - itemId: yig_8080
+    addr: 192.168.2.128:8080
+  - itemId: yig_9000
+    addr: 192.168.2.128:9000
 ```
 ## grafana模板
 grafana监控面板模板文件为monitor_yig.json,浏览器打开grafana监页面导入。

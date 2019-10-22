@@ -7,34 +7,34 @@ import(
     "github.com/prometheus/client_golang/prometheus"
 )
 
-type {{.Type}}Metrics struct {
-    {{.Type}}Desc *prometheus.Desc
+type {{.ItemId}}Metrics struct {
+    {{.ItemId}}Desc *prometheus.Desc
 }
 
-func (c *{{.Type}}Metrics) process_function() (flag bool) {
-    cmd:=exec.Command("systemctl","status","{{.Type}}")
+func (c *{{.ItemId}}Metrics) process_function() (flag bool) {
+    cmd:=exec.Command("systemctl","status","{{.ItemId}}")
     out,err:=cmd.Output()
     if err !=nil{
-        fmt.Println("systemctl {{.Type}} err ",err)
+        fmt.Println("systemctl {{.ItemId}} err ",err)
     }
     flag=strings.Contains(string(out), "(running)")
     return flag
 }
 
 func init() {
-	registerCollector("{{.Type}}", defaultEnabled, New{{.Type}}Metrics)
+	registerCollector("{{.ItemId}}", defaultEnabled, New{{.ItemId}}Metrics)
 }
-func New{{.Type}}Metrics()  (Collector, error) {
-    return &{{.Type}}Metrics{
-        {{.Type}}Desc: prometheus.NewDesc(
-            "{{.FqName}}",
-            "{{.FqName}}_monitor",
-            []string{"{{.VariableLabels}}"},
+func New{{.ItemId}}Metrics()  (Collector, error) {
+    return &{{.ItemId}}Metrics{
+        {{.ItemId}}Desc: prometheus.NewDesc(
+            "process_{{.ItemId}}_status",
+            "process_{{.ItemId}}_monitor",
+            []string{"itemId","host"},
             nil,
          ),
     }, nil
 }
-func (c *{{.Type}}Metrics) Update(ch chan<- prometheus.Metric) error{
+func (c *{{.ItemId}}Metrics) Update(ch chan<- prometheus.Metric) error{
     var value=0
     flag:=c.process_function()
     if flag==true{
@@ -43,10 +43,11 @@ func (c *{{.Type}}Metrics) Update(ch chan<- prometheus.Metric) error{
         value=0
     }
     ch <- prometheus.MustNewConstMetric(
-    	c.{{.Type}}Desc,
+    	c.{{.ItemId}}Desc,
         prometheus.CounterValue,
         float64(value),
-        "{{.LabelValues}}",
+        "{{.ItemId}}",
+        "{{.Host}}",
      )
      return nil
 }

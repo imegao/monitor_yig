@@ -6,11 +6,11 @@ import (
         "net"
         "strings"
 )
-type {{.Type}}Metrics struct {
-    {{.Type}}Desc *prometheus.Desc
+type {{.ItemId}}Metrics struct {
+    {{.ItemId}}Desc *prometheus.Desc
 }
 
-func (c *{{.Type}}Metrics) Http_function() (http_status int) {
+func (c *{{.ItemId}}Metrics) Http_function() (http_status int) {
 	transport := &http.Transport{
 		Dial: (&net.Dialer{
 			Timeout: 10 * time.Second,
@@ -37,25 +37,26 @@ func (c *{{.Type}}Metrics) Http_function() (http_status int) {
 }
 
 func init() {
-	registerCollector("{{.Type}}", defaultEnabled, New{{.Type}}Metrics)
+	registerCollector("{{.ItemId}}", defaultEnabled, New{{.ItemId}}Metrics)
 }
-func New{{.Type}}Metrics()  (Collector, error) {
-	return &{{.Type}}Metrics{
-		{{.Type}}Desc: prometheus.NewDesc(
-		    "{{.FqName}}",
-		    "{{.FqName}}_monitor",
-			[]string{"{{.VariableLabels}}"},
-			nil,
+func New{{.ItemId}}Metrics()  (Collector, error) {
+	return &{{.ItemId}}Metrics{
+		{{.ItemId}}Desc: prometheus.NewDesc(
+		    "http_{{.ItemId}}_status",
+		    "http_{{.ItemId}}_monitor",
+		    []string{"itemId","host"},
+		    nil,
 		),
 	},nil
 }
-func (c *{{.Type}}Metrics) Update(ch chan<- prometheus.Metric) error{
+func (c *{{.ItemId}}Metrics) Update(ch chan<- prometheus.Metric) error{
 	StatusCode:= c.Http_function()
 	ch <- prometheus.MustNewConstMetric(
-		c.{{.Type}}Desc,
+		c.{{.ItemId}}Desc,
 		prometheus.CounterValue,
 		float64(StatusCode),
-		"{{.LabelValues}}",
+		"{{.ItemId}}",
+                "{{.Host}}",
 	)
 	return nil
 }

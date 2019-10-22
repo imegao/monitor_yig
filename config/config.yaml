@@ -1,66 +1,25 @@
 targetPath: ./monitor_yig_exporter/collector/
-databases:
-  - databaseHostId: 1
-    databaseNodes:
-      - fileName: tidb_monitor.go
-        type: tidb
-        dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8
-        fqName: tidb_status
-        variableLabels: status
-        labelValues: tidb
-caches:
-  - cacheHostId: 1
-    cacheNodes:
-      - fileName: redis_monitor.go
-        type: redis
-        addr: 192.168.2.128:6379
-        password: hehehehe
-        fqName: redis_status
-        variableLabels: status
-        labelValues: redis
-httpservers:
-  - httpHostId: 1
-    httpNodes:
-      - fileName: iam_api_monitor.go
-        type: iam
-        method: GET
-        url: http://192.168.2.128:8888/hello?user=admin&pass=888
-        headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
-        fqName: iam_status
-        variableLabels: status
-        labelValues: iam
-  - httpHostId: 2
-    httpNodes:
-      - fileName: postPay_api_monitor.go
-        type: postPay
-        method: HEAD
-        url: http://192.168.2.128:7777/hello?user=admin&pass=777
-        headers: ["Accept-Language:zh-cn,zh","Accept-Encoding:gzip,deflate","fhdsvhodv:fdsvfsv","Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98"]
-        fqName: postPay_status
-        variableLabels: status
-        labelValues: postPay
-processes:
-  - processHostId: 1
-    processNodes:
-      - fileName: process_monitor.go
-        type: dnsmasq
-        fqName: dnsmasq_status
-        variableLabels: status
-        labelValues: dnsmasq
-tcps:
-  - tcpHostId: 1
-    tcpNodes:
-      - fileName: tcp1_monitor.go
-        type: tcp1
-        addr: 192.168.2.128:9888
-        fqName: tcp1_status
-        variableLabels: status
-        labelValues: tcp
-  - tcpHostId: 1
-    tcpNodes:
-      - fileName: tcp2_monitor.go
-        type: tcp2
-        addr: 192.168.2.128:9887
-        fqName: tcp2_status
-        variableLabels: status
-        labelValues: tcp
+host: 192.168.2.128
+mysql:
+  - itemId: tidb_4000
+    dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8
+redis:
+  - itemId: redis_6379
+    addr: 192.168.2.128:6379
+    password: hehehehe
+http:
+  - itemId: Iam_0001
+    method: GET
+    url: http://192.168.2.128:8888/hello?user=admin&pass=888
+    headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
+  - itemId: PostPay_0001
+    method: HEAD
+    url: http://192.168.2.128:7777/hello?user=admin&pass=777
+    headers: ["Accept-Language:zh-cn,zh","Accept-Encoding:gzip,deflate","fhdsvhodv:fdsvfsv","Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98"]
+process:
+  - itemId: dnsmasq
+tcp:
+  - itemId: yig_8080
+    addr: 192.168.2.128:8080
+  - itemId: yig_9000
+    addr: 192.168.2.128:9000
