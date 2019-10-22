@@ -43,6 +43,7 @@ type TcpNode struct{
 }
 type ProcessNode struct{
         ItemId         string    `yaml:"itemId"`
+        ServiceName    string    `yaml:"serviceName"`
         Host           string
 }
 func ReadConfig(p string){

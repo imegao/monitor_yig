@@ -54,7 +54,7 @@ func generateFile(filename string)(){
 func generateHttp(c *config.HttpNode){
         var err error
 	var httpTemplate *template.Template
-        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]+$",c.ItemId)
         if ok!=true{
                 fmt.Println("HTTP itemId Configuration error")
                 os.Exit(1)
@@ -80,7 +80,7 @@ func generateHttp(c *config.HttpNode){
 func generateRedis(c *config.RedisNode){
 	var err error
 	var cacheTemplate *template.Template
-        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]+$",c.ItemId)
         if ok!=true{
                 fmt.Println("Redis itemId Configuration error")
                 os.Exit(1)
@@ -106,7 +106,7 @@ func generateRedis(c *config.RedisNode){
 func generateMysql(c *config.MysqlNode){
 	var err error
 	var dbTemplate *template.Template
-        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]+$",c.ItemId)
         if ok!=true{
                 fmt.Println("Mysql itemId Configuration error")
                 os.Exit(1)
@@ -133,6 +133,11 @@ func generateMysql(c *config.MysqlNode){
 func generateProcess(c *config.ProcessNode){
 	var err error
 	var processTemplate *template.Template
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]+$",c.ItemId)
+        if ok!=true{
+                fmt.Println("HTTP itemId Configuration error")
+                os.Exit(1)
+        }
 	processTemplate, err = template.ParseFiles("./collector/process_template.go")
 	if err != nil {
 		fmt.Println("process_template parse file err:", err)
@@ -154,7 +159,7 @@ func generateProcess(c *config.ProcessNode){
 func generateTcp(c *config.TcpNode){
 	var err error
 	var tcpTemplate *template.Template
-        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]{4}$",c.ItemId)
+        ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]+$",c.ItemId)
         if ok!=true{
                 fmt.Println("TCP itemId Configuration error")
                 os.Exit(1)

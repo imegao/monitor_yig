@@ -12,10 +12,10 @@ type {{.ItemId}}Metrics struct {
 }
 
 func (c *{{.ItemId}}Metrics) process_function() (flag bool) {
-    cmd:=exec.Command("systemctl","status","{{.ItemId}}")
+    cmd:=exec.Command("systemctl","status","{{.ServiceName}}")
     out,err:=cmd.Output()
     if err !=nil{
-        fmt.Println("systemctl {{.ItemId}} err ",err)
+        fmt.Println("systemctl {{.ServiceName}} err ",err)
     }
     flag=strings.Contains(string(out), "(running)")
     return flag

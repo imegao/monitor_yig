@@ -8,16 +8,17 @@ redis:
     addr: 192.168.2.128:6379
     password: hehehehe
 http:
-  - itemId: Iam_0001
+  - itemId: Iam_01
     method: GET
     url: http://192.168.2.128:8888/hello?user=admin&pass=888
     headers: ["Accept-Language:zh-cn,en","dsafaf:fsvfds"]
-  - itemId: PostPay_0001
+  - itemId: PostPay_01
     method: HEAD
     url: http://192.168.2.128:7777/hello?user=admin&pass=777
     headers: ["Accept-Language:zh-cn,zh","Accept-Encoding:gzip,deflate","fhdsvhodv:fdsvfsv","Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98"]
 process:
-  - itemId: dnsmasq
+  - itemId: dnsmasq_01
+    serviceName: dnsmasq
 tcp:
   - itemId: yig_8080
     addr: 192.168.2.128:8080

@@ -122,7 +122,7 @@ groups:
 targetPath: ./monitor_yig_exporter/collector/
 host: 192.168.2.128  #监控主机的IP
 mysql:
-  - itemId: tidb_4000  监控项的ID,必须唯一，格式：字符串_四位数字
+  - itemId: tidb_4000  监控项的ID,必须唯一，格式：字符串_数字
     dataSourceName: root:@tcp(192.168.2.128:4000)/yig?charset=utf8
 redis:
   - itemId: redis_6379
@@ -138,7 +138,8 @@ http:
     url: http://192.168.2.128:7777/hello?user=admin&pass=777
     headers: ["Accept-Language:zh-cn,zh","Accept-Encoding:gzip,deflate","fhdsvhodv:fdsvfsv","Cookie:JSESSIONID=369766FDF6220F7803433C0B2DE36D98"]
 process:
-  - itemId: dnsmasq  #监控systemctl服务的名称 不同于其他ID
+  - itemId: dnsmasq01
+    serviceName: dnsmasq
 tcp:
   - itemId: yig_8080
     addr: 192.168.2.128:8080
