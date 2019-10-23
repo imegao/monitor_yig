@@ -157,3 +157,29 @@ grafana监控面板模板文件为monitor_yig.json,浏览器打开grafana监页�
 
 在docker环境中第一次编译运行需要加载golang包，如果在下载golang包过程中因网速问题卡住，需要docker restart 
 
+## 详细操作步骤
+1、进入需要监控的节点
+
+2、go version 查看golang环境进行安装（未安装使用yum intall golang 进行安装，yum未找到使用wget https://dl.google.com/go/go1.12.linux-amd64.tar.gz && tar -C /usr/local -xzf go1.12.linux-amd64.tar.gz && rm -f go1.12.linux-amd64.tar.gz 进行安装）
+
+3、netstat -tunlp 查看端口使用情况（主要查看9100端口，监控程序默认使用是9100端口，若端口被占用则使用其他端口）
+
+4、git clone https://gitgub.com/imegao/monitor_yig
+
+5、cd /etc/yig/yig.toml(查看监控yig的端口和tidb redis的配置)
+
+6、vi monitor_yig/config/config.yaml 配置文件进行相关配置 （host当前部署主机的IP，tidb和redis是中控机的addr，yig一般是本地的yig使用tcp类型监控本地的端口）
+
+7、如果第3步中查看端口9100未被占用跳过本步骤（vi monitor_yig/Makefile   修改make run下的端口）
+
+8、make build(无报错执行下一步，有错误一般是配置文件的格式错误)
+
+9、make run(无报错执行下一步，有报错一般是配置的tidb和redis addr不正确，或者配置的systemctl未运行)
+
+10、浏览器打开或curl 地址:端口/metrics查看配置是否成功（格式为你配置文件中 type_itemId_status，type非http类型，数值为1则正常，http类型为标准返回码，一般为0有两种情况：配置出错或者监控项未运行）
+
+11、在prometheus配置文件加入监控的monitor_yig相关配置（查看是否成功）
+
+12、配置alertmanager（需要自行配置）
+
+13、配置grafana(提供的grafana.josn文件在导入的时候因为版本可能出现问题，可以参考node_exporter监控模板进行配置)
