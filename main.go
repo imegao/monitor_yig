@@ -135,7 +135,7 @@ func generateProcess(c *config.ProcessNode){
 	var processTemplate *template.Template
         ok,_:=regexp.MatchString("^[a-zA-Z]+[_][0-9]+$",c.ItemId)
         if ok!=true{
-                fmt.Println("HTTP itemId Configuration error")
+                fmt.Println("Process itemId Configuration error")
                 os.Exit(1)
         }
 	processTemplate, err = template.ParseFiles("./collector/process_template.go")
