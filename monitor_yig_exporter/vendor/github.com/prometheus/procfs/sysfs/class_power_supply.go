@@ -110,7 +110,7 @@ func (fs FS) PowerSupplyClass() (PowerSupplyClass, error) {
 
 	dirs, err := ioutil.ReadDir(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to list power supplies at %q: %v", path, err)
+		return nil, err
 	}
 
 	psc := make(PowerSupplyClass, len(dirs))
@@ -145,7 +145,7 @@ func parsePowerSupply(path string) (*PowerSupply, error) {
 			if os.IsNotExist(err) || err.Error() == "operation not supported" || err.Error() == "invalid argument" {
 				continue
 			}
-			return nil, fmt.Errorf("failed to read file %q: %v", name, err)
+			return nil, fmt.Errorf("failed to read file %q: %w", name, err)
 		}
 
 		vp := util.NewValueParser(value)
